@@ -11,7 +11,8 @@ The step is parameterized as follows:
 * *api_gateway_region*: the region where the API Gateway instance is located (e.g. `us-east-1`)
 * *api_gateway_id*: the ID of the API Gateway instance (e.g. `kbh4evafj0b5`)
 * *api_gateway_stage*: the stage of the API Gateway instance (e.g. `dev`)
-* *dynamo_tablename*: the DynamoDB table that stores the scope mappings
+* *oauth_dynamo_tablename*: the DynamoDB table that stores the OAuth scope mappings
+* *oauth_dynamo_region*: location of the DynamoDB table (e.g. `us-east-1`)
 
 ## Example
 
@@ -19,9 +20,10 @@ The step is parameterized as follows:
 steps:
     - audienceproject/add-scopes:
         - swagger_file: api.json
-        - aws_account_id: XXX
+        - aws_account_id: someAwsAccountId
         - api_gateway_region: us-east-1
-        - api_gateway_id: YYY
+        - api_gateway_id: someApiGatewayID
         - api_gateway_stage: dev
-        - dynamo_tablename: ZZZ
+        - oauth_dynamo_tablename: someTableName
+        - oauth_dynamo_region: us-east-1
 ```
