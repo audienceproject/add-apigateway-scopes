@@ -10,15 +10,15 @@ properties:
   aws_account_id:
     type: string
     required: true
-  aws_region:
-    type: string
-    required: true
-  api_gateway_stage:
+  api_gateway_region:
     type: string
     required: true
   api_gateway_id:
     type: string
     required: true
-  dynamo_table:
+  api_gateway_stage:
+    type: string
+    required: true
+  dynamo_tablename:
     type: string
     required: true
