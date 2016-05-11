@@ -1,2 +1,2 @@
-# add-apigateway-scopes
+# add scopes
 Wercker step
