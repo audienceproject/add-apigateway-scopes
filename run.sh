@@ -39,7 +39,7 @@ for mapping in mappings:
             table.put_item(
                Item={
                     'apiId': api_gateway_id,
-                    'methodArn': "arn:aws:execute-api:" + api_gateway_region + ":" + aws_account_id + ":" + api_gateway_id + "/" + apiGatewayStage + "/" + method + re.sub("{.+}", "*", mapping),
+                    'methodArn': "arn:aws:execute-api:" + api_gateway_region + ":" + aws_account_id + ":" + api_gateway_id + "/" + apiGatewayStage + "/" + method + re.sub("{.+?}", "*", mapping),
                     'scopes': set(mappings[mapping][method])
                 }
             )

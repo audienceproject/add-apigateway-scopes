@@ -1,5 +1,5 @@
 name: add-scopes
-version: 1.0.2
+version: 1.0.3
 description: Updates a DynamoDB table with scopes for a given API Gateway instance.
 keywords:
   - oauth
