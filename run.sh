@@ -7,7 +7,6 @@ import re
 import boto3
 
 from boto3.dynamodb.conditions import Key, Attr
-
 mappings = json.loads(sys.stdin.read())
 aws_account_id = sys.argv[1]
 api_gateway_region = sys.argv[2]
@@ -19,12 +18,12 @@ oauth_dynamo_region = sys.argv[6]
 dynamodb = boto3.resource('dynamodb', region_name=oauth_dynamo_region)
 table = dynamodb.Table(oauth_dynamo_tablename)
 
+arnBeginning="arn:aws:execute-api:" + api_gateway_region + ":" + aws_account_id + ":" + api_gateway_id + "/" + apiGatewayStage + "/"
 existingRules = table.query(
     KeyConditionExpression=Key('apiId').eq(api_gateway_id)
 )['Items']
-
 with table.batch_writer() as batch:
-    for existingRule in existingRules:
+    for existingRule in [x for x in existingRules if x["methodArn"].startswith(arnBeginning)]:
         batch.delete_item(
             Key={
                 'apiId': existingRule["apiId"],
@@ -35,11 +34,11 @@ with table.batch_writer() as batch:
 for mapping in mappings:
     for method in mappings[mapping]:
         if ( mappings[mapping].get(method) ):
-            print ("arn:aws:execute-api:" + api_gateway_region + ":" + aws_account_id + ":" + api_gateway_id + "/" + apiGatewayStage + "/" + method + re.sub("{.+}", "*", mapping) + " => " + ",".join(mappings[mapping][method]))
+            print (arnBeginning + method + re.sub("{.+}", "*", mapping) + " => " + ",".join(mappings[mapping][method]))
             table.put_item(
                Item={
                     'apiId': api_gateway_id,
-                    'methodArn': "arn:aws:execute-api:" + api_gateway_region + ":" + aws_account_id + ":" + api_gateway_id + "/" + apiGatewayStage + "/" + method + re.sub("{.+?}", "*", mapping),
+                    'methodArn': arnBeginning + method + re.sub("{.+?}", "*", mapping),
                     'scopes': set(mappings[mapping][method])
                 }
             )
